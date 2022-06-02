@@ -76,10 +76,13 @@ public class Master : MonoBehaviourPunCallbacks
             //resetting text
             Chat.text = "";
 
-            //restoring player movement
-            if (Cat == "Yuki") Yuki.GetComponent<Player_Motor>().enabled = true;
-            else Ink.GetComponent<Player_Motor>().enabled = true;
+            if (Cat == "Yuki") Yuki.GetComponent<AudioSource>().Play();
+            else Ink.GetComponent<AudioSource>().Play();
         }
+
+        //restoring player movement
+        if (Cat == "Yuki") Yuki.GetComponent<Player_Motor>().enabled = true;
+        else Ink.GetComponent<Player_Motor>().enabled = true;
     }
 
     void Menu()

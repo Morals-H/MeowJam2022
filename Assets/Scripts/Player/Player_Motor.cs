@@ -13,7 +13,7 @@ public class Player_Motor : MonoBehaviour
 
     //Fall Logic
     public int isGrounded;
-    private bool canJump;
+    private bool canJump, canRoll;
 
     //Network Logic
     private PhotonView View;
@@ -21,9 +21,10 @@ public class Player_Motor : MonoBehaviour
 
     //Animation Logic
     private Animator Anim;
+    private AudioSource Aud;
 
     //misc
-    private int timer;
+    private int timer, AniTimer;
     private TextMesh Text;
 
     // Start is called before the first frame update
@@ -31,6 +32,7 @@ public class Player_Motor : MonoBehaviour
     {
         Rig = GetComponent<Rigidbody>();
         Anim = GetComponent<Animator>();
+        Aud = GetComponent<AudioSource>();
         View = GetComponent<PhotonView>();
         Text = GetComponentInChildren<TextMesh>();
 
@@ -55,7 +57,6 @@ public class Player_Motor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timer > 0) timer--;
 
         if (View.IsMine && isPlayer)
         {
@@ -63,6 +64,10 @@ public class Player_Motor : MonoBehaviour
             mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             if (mov.x != 0 || mov.z != 0)
             {
+
+                if (Input.GetAxis("Jump/Roll") < -0.25f && isGrounded == 2 && canRoll) Roll();
+                else if (Input.GetAxis("Jump/Roll") == 0 && isGrounded == 2) canRoll = true;
+
                 Anim.SetFloat("Speed", Speed);
                 Move(); 
             }
@@ -72,16 +77,26 @@ public class Player_Motor : MonoBehaviour
             {
                 if (Speed < 4)
                 {
-                    Speed += Speed / 1000;
+                    Speed += Speed / 500;
                 }
                 else if (Speed > 4) Speed = 4;
             }
             else Speed = 1.5f;
 
             //Jumping
-            if (Input.GetAxis("Jump") > 0.25f && isGrounded > 0 && canJump) Jump();
-            else if (Input.GetAxis("Jump") == 0 && isGrounded > 0) canJump = true;
+            if (Input.GetAxis("Jump/Roll") > 0.25f && isGrounded > 0 && canJump) Jump();
+            else if (Input.GetAxis("Jump/Roll") == 0 && isGrounded > 0) canJump = true;
         }
+    }
+
+    //all the 
+    private void FixedUpdate()
+    {
+
+        if (timer > 0) timer--;
+        if (AniTimer > 0) AniTimer--;
+
+        if (Anim.GetBool("Action") && AniTimer == 0) Anim.SetBool("Action", false);
     }
 
     public Transform cam;
@@ -108,13 +123,36 @@ public class Player_Motor : MonoBehaviour
         }
     }
 
+    //when player trys to roll
+    void Roll()
+    {
+        canRoll = false;
+        AniTimer = 20;
+        Anim.SetBool("Action", true);
+        Rig.velocity = new Vector3(0, 0, Rig.velocity.z);
+        Rig.AddForce(transform.forward * (Speed * 1.5f), ForceMode.Impulse);
+    }
+
     //when player trys to jump
     void Jump()
     {
-        Rig.velocity = new Vector3(0, 0, 0);
-        Rig.AddForce(transform.up * 4, ForceMode.Impulse);
-        isGrounded --; canJump = false;
+        //animation
+        if (isGrounded == 1)
+        {
+            AniTimer = 20;
+            Anim.SetBool("Action", true);
+            Rig.velocity = new Vector3(0, 0, Rig.velocity.z);
+            Rig.AddForce(transform.up * 3 + transform.forward * 2, ForceMode.Impulse);
+        }
+        else
+        {
+            //logic
+            Rig.velocity = new Vector3(0, 0, Rig.velocity.z);
+            Rig.AddForce(transform.up * 5, ForceMode.Impulse);
+        }
 
+        isGrounded --; canJump = false;
+        Anim.SetBool("isGrounded", false);
     }
 
     //collision handling
@@ -122,7 +160,11 @@ public class Player_Motor : MonoBehaviour
     {
         if (View.IsMine && isPlayer)
         {
-            if (Physics.Raycast(transform.position, Vector3.down, .5f)) isGrounded = 2;
+            if (Physics.Raycast(transform.position, Vector3.down, 0.1f))
+            {
+                isGrounded = 2;
+                Anim.SetBool("isGrounded", true);
+            }
         }
     }
     //When exiting a Collider
@@ -131,6 +173,7 @@ public class Player_Motor : MonoBehaviour
         if (View.IsMine && isPlayer)
         {
             if(isGrounded == 2) isGrounded = 1;
+            Anim.SetBool("isGrounded", false);
         }
     }
 
@@ -165,8 +208,9 @@ public class Player_Motor : MonoBehaviour
     {
         if (otherCat == this.name)
         {
+            Aud.Play();
             Text.text = Msg;
-            Text.GetComponent<TextToCamera>().Timer = Msg.Length * 100;
+            Text.GetComponent<TextToCamera>().Timer = Msg.Length * 20;
         }
     }
 }

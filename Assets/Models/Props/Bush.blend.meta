@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Bush
+    second: {fileID: 2100000, guid: ce6feeda36045504e9b2792265f9a73d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: PineTree
     second: {fileID: 2100000, guid: ce6feeda36045504e9b2792265f9a73d, type: 2}
   materials:
