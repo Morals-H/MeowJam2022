@@ -26,6 +26,7 @@ public class Player_Motor : MonoBehaviour
     //misc
     private int timer, AniTimer;
     private TextMesh Text;
+    private CapsuleCollider Col;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,7 @@ public class Player_Motor : MonoBehaviour
         Aud = GetComponent<AudioSource>();
         View = GetComponent<PhotonView>();
         Text = GetComponentInChildren<TextMesh>();
+        Col = GetComponent<CapsuleCollider>();
 
         //setting host character
         if (PhotonNetwork.IsMasterClient && gameObject.name == "Ink")
@@ -57,8 +59,19 @@ public class Player_Motor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //changing collider for the animation
+        if (Anim.GetCurrentAnimatorStateInfo(0).IsName("DoubleJump") || Anim.GetCurrentAnimatorStateInfo(0).IsName("Roll"))
+        {
+            Col.height = 1;
+            Col.center = new Vector3(0, 0.5f, 0);
+        }
+        else 
+        {
+            Col.height = 1.5f;
+            Col.center = new Vector3(0, 0.72f, 0);
+        }
 
-        if (View.IsMine && isPlayer)
+            if (View.IsMine && isPlayer)
         {
             //getting player movement input
             mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -107,7 +120,6 @@ public class Player_Motor : MonoBehaviour
     //WASD Movement
     void Move()
     {
-
         Vector3 direction = new Vector3(mov.x, 0f, mov.z).normalized;
 
         if (direction.magnitude >= 0.1f)
@@ -126,11 +138,12 @@ public class Player_Motor : MonoBehaviour
     //when player trys to roll
     void Roll()
     {
+        Rig.velocity = new Vector3(0, 0, 0);
+        Rig.AddForce(transform.forward * 4, ForceMode.Impulse);
+        Anim.SetBool("isGrounded", true);
         canRoll = false;
         AniTimer = 20;
         Anim.SetBool("Action", true);
-        Rig.velocity = new Vector3(0, 0, Rig.velocity.z);
-        Rig.AddForce(transform.forward * (Speed * 1.5f), ForceMode.Impulse);
     }
 
     //when player trys to jump
@@ -141,7 +154,7 @@ public class Player_Motor : MonoBehaviour
         {
             AniTimer = 20;
             Anim.SetBool("Action", true);
-            Rig.velocity = new Vector3(0, 0, Rig.velocity.z);
+            Rig.velocity = new Vector3(0, 0, 0);
             Rig.AddForce(transform.up * 3 + transform.forward * 2, ForceMode.Impulse);
         }
         else
@@ -158,12 +171,13 @@ public class Player_Motor : MonoBehaviour
     //collision handling
     private void OnCollisionStay(Collision collision)
     {
+        Anim.SetBool("isGrounded", true);
+
         if (View.IsMine && isPlayer)
         {
             if (Physics.Raycast(transform.position, Vector3.down, 0.1f))
             {
                 isGrounded = 2;
-                Anim.SetBool("isGrounded", true);
             }
         }
     }

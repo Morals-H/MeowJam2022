@@ -60,7 +60,7 @@ public class Menu : MonoBehaviourPunCallbacks
     //when called to host
     void Host()
     {
-        Load_Text.GetComponentInChildren<Text>().text = "Connecting...";
+        Load_Text.GetComponentInChildren<Text>().text = "Checking Name...";
         if (rooms.Count > 0)
         {
             for (int i = 0; i < rooms.Count; i++)

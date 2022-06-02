@@ -21,7 +21,7 @@ public class Master : MonoBehaviourPunCallbacks
     void Start()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
 
         //preparing networking
         PhotonNetwork.SendRate = 20;
@@ -42,6 +42,7 @@ public class Master : MonoBehaviourPunCallbacks
             {
                 PauseMenu.SetActive(true);
                 Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Confined;
                 if (Cat == "Yuki")
                 {
                     Yuki.GetComponent<Animator>().SetFloat("Speed", 0);
@@ -63,6 +64,7 @@ public class Master : MonoBehaviourPunCallbacks
     {
         PauseMenu.SetActive(false);
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         if (Chat.text != "")
         {
