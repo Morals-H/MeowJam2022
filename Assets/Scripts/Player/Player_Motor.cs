@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Cinemachine;
 
 public class Player_Motor : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class Player_Motor : MonoBehaviour
     private TextMesh Text;
     private CapsuleCollider Col;
 
+    private GameObject Ink, Yuki;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,17 +41,9 @@ public class Player_Motor : MonoBehaviour
         Col = GetComponent<CapsuleCollider>();
         Circle = transform.Find("LandRing");
         Circle.gameObject.SetActive(false);
+        Yuki = GameObject.Find("Yuki");
+        Ink = GameObject.Find("Ink");
 
-        //setting host character
-        if (PhotonNetwork.IsMasterClient && gameObject.name == "Ink")
-        {
-            isPlayer = true;
-            //grabbing ownwership
-            View.RequestOwnership();
-
-            //setting canvas tag
-            GameObject.Find("Canvas").GetComponent<Master>().Cat = gameObject.name;
-        }
     }
 
     // Update is called once per frame
@@ -106,10 +100,17 @@ public class Player_Motor : MonoBehaviour
     //help players figure where they are
     private RaycastHit Floor;
     private Transform Circle;
+    private int partner;
 
     //updated every few miliseconds
     private void FixedUpdate()
     {
+        if (PhotonNetwork.CurrentRoom.PlayerCount != partner)
+        {
+            partner = PhotonNetwork.CurrentRoom.PlayerCount;
+            View.RPC("RPC_MyCat", RpcTarget.All, isPlayer);
+        }
+
 
         //action timer
         if (timer > 0)
@@ -211,8 +212,41 @@ public class Player_Motor : MonoBehaviour
     }
 
     //Networking
+    //getting our cat
+        [PunRPC]
+    public void RPC_MyCat(bool Player)
+    {
+        if (!isPlayer) 
+        {
+            isPlayer = Player;
+        }
 
+        if (!isPlayer && GameObject.Find("Canvas").GetComponent<Master>().Cat == "")
+        {
+            GetComponent<PhotonView>().RequestOwnership();
+            isPlayer = true;
+
+            if (Yuki.GetComponent<PhotonView>().IsMine && Ink.GetComponent<PhotonView>().IsMine && Yuki.GetComponent<Player_Motor>().isPlayer && Ink.GetComponent<Player_Motor>().isPlayer)
+            {
+                Yuki.GetComponent<Player_Motor>().isPlayer = false;
+            }
+
+            CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
+            TPSCam.LookAt = transform.Find("Scarf").transform;
+            TPSCam.Follow = transform;
+            Debug.Log(name + " " + Player);
+            GameObject.Find("Canvas").GetComponent<Master>().Cat = name;
+        }
+    }
+
+    //when player leaves
     [PunRPC]
+    public void RPC_Left()
+    {
+        isPlayer = false;
+    }
+
+        [PunRPC]
     public void RPC_Chat(string otherCat, string Msg)
     {
         if (otherCat == this.name)

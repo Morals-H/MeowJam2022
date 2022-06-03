@@ -116,6 +116,7 @@ public class Menu : MonoBehaviourPunCallbacks
         void Exit()
     {
         PhotonNetwork.LeaveLobby();
+        Application.Quit();
     }
     private void OnApplicationQuit()
     {
