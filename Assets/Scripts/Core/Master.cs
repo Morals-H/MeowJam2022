@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Cinemachine;
 
 public class Master : MonoBehaviourPunCallbacks
 {
@@ -16,10 +17,14 @@ public class Master : MonoBehaviourPunCallbacks
     //player logic
     public GameObject Yuki, Ink;
     public string Cat;
+    private PhotonView View;
 
     // Start is called before the first frame update
     void Start()
     {
+        View = GetComponent<PhotonView>();
+
+        //hiding cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -28,9 +33,45 @@ public class Master : MonoBehaviourPunCallbacks
         PhotonNetwork.SerializationRate = 10;
     }
 
+    //getting our cat
+    [PunRPC]
+    public void RPC_RequestCat()
+    {
+        View.RPC("RPC_MyCat", RpcTarget.All, gameObject.name);
+    }
+
+    [PunRPC]
+    public void RPC_MyCat(string OtherCat)
+    {
+        Cat = OtherCat;
+
+        //setting camera
+        CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
+
+        //the reverse 
+        if (Cat == "yuki")
+        {
+            Ink.GetComponent<Player_Motor>().isPlayer = true;
+            TPSCam.LookAt = Ink.transform.Find("Scarf").transform;
+            TPSCam.Follow = Ink.transform;
+
+        }
+        else
+        {
+            Yuki.GetComponent<Player_Motor>().isPlayer = true;
+            TPSCam.LookAt = Yuki.transform.Find("Scarf").transform;
+            TPSCam.Follow = Yuki.transform;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (!Ink.GetComponent<PhotonView>().IsMine && !Yuki.GetComponent<PhotonView>().IsMine)
+        {
+            View.RPC("RPC_RequestCat", RpcTarget.All);
+        }
+
         if (Input.GetAxis("Pause") > 0 && !SetPause)
         {
             SetPause = true;
@@ -89,13 +130,10 @@ public class Master : MonoBehaviourPunCallbacks
 
     void Menu()
     {
-        //clearing character
-        if(Cat == "Ink") Ink.GetComponent<Player_Motor>().isPlayer = false;
-        else Yuki.GetComponent<Player_Motor>().isPlayer = false;
-
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("Menu");
     }
+
     private void OnApplicationQuit()
     {
         try

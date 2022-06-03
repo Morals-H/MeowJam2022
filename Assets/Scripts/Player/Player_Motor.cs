@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Cinemachine;
 
 public class Player_Motor : MonoBehaviour
 {
@@ -31,25 +30,22 @@ public class Player_Motor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //important components
         Rig = GetComponent<Rigidbody>();
         Anim = GetComponent<Animator>();
         Aud = GetComponent<AudioSource>();
         View = GetComponent<PhotonView>();
         Text = GetComponentInChildren<TextMesh>();
         Col = GetComponent<CapsuleCollider>();
+        Circle = transform.Find("LandRing");
+        Circle.gameObject.SetActive(false);
 
         //setting host character
         if (PhotonNetwork.IsMasterClient && gameObject.name == "Ink")
         {
-            View.RPC("RPC_MyCat", RpcTarget.AllBuffered, gameObject.name);
             isPlayer = true;
             //grabbing ownwership
             View.RequestOwnership();
-
-            //setting camera
-            CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
-            TPSCam.LookAt = transform.Find("Scarf").transform;
-            TPSCam.Follow = transform;
 
             //setting canvas tag
             GameObject.Find("Canvas").GetComponent<Master>().Cat = gameObject.name;
@@ -65,13 +61,13 @@ public class Player_Motor : MonoBehaviour
             Col.height = 1;
             Col.center = new Vector3(0, 0.5f, 0);
         }
-        else 
+        else
         {
             Col.height = 1.5f;
             Col.center = new Vector3(0, 0.72f, 0);
         }
 
-            if (View.IsMine && isPlayer)
+        if (View.IsMine && isPlayer)
         {
             //getting player movement input
             mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -82,7 +78,7 @@ public class Player_Motor : MonoBehaviour
                 else if (Input.GetAxis("Jump/Roll") == 0 && isGrounded == 2) canRoll = true;
 
                 Anim.SetFloat("Speed", Speed);
-                Move(); 
+                Move();
             }
             else Anim.SetFloat("Speed", 0);
 
@@ -90,7 +86,7 @@ public class Player_Motor : MonoBehaviour
             {
                 if (Speed < 4)
                 {
-                    Speed += Speed / 500;
+                    Speed += Speed / 100;
                 }
                 else if (Speed > 4) Speed = 4;
             }
@@ -100,15 +96,38 @@ public class Player_Motor : MonoBehaviour
             if (Input.GetAxis("Jump/Roll") > 0.25f && isGrounded > 0 && canJump) Jump();
             else if (Input.GetAxis("Jump/Roll") == 0 && isGrounded > 0) canJump = true;
         }
+
+        if (transform.position.y < -20)
+        {
+            transform.position = new Vector3(0, 20, 0);
+        }
     }
 
-    //all the 
+    //help players figure where they are
+    private RaycastHit Floor;
+    private Transform Circle;
+
+    //updated every few miliseconds
     private void FixedUpdate()
     {
 
-        if (timer > 0) timer--;
-        if (AniTimer > 0) AniTimer--;
+        //action timer
+        if (timer > 0)
+        {
+            timer--;
+        }
+        
+        if (isGrounded != 2)
+        {
+            Physics.Raycast(transform.position, Vector3.down, out Floor, Mathf.Infinity);
+            Circle.position = Floor.point;
+            if (Vector3.Distance(transform.position, Circle.position) > 0.25f) Circle.gameObject.SetActive(true);
+            else Circle.gameObject.SetActive(false);
+        }
+        else Circle.gameObject.SetActive(false);
 
+        //animation timer
+        if (AniTimer > 0) AniTimer--;
         if (Anim.GetBool("Action") && AniTimer == 0) Anim.SetBool("Action", false);
     }
 
@@ -191,31 +210,7 @@ public class Player_Motor : MonoBehaviour
         }
     }
 
-    private Player_Motor Local;
-
     //Networking
-    [PunRPC]
-    public void RPC_MyCat(string RPCCat)
-    {
-        if (!PhotonNetwork.IsMasterClient) 
-        {
-
-            if (RPCCat == "Yuki") Local = GameObject.Find("Canvas").GetComponent<Master>().Ink.GetComponent<Player_Motor>();
-            else Local = GameObject.Find("Canvas").GetComponent<Master>().Yuki.GetComponent<Player_Motor>();
-
-            Local.isPlayer = true;
-            //grabbing ownwership
-            Local.GetComponent<PhotonView>().RequestOwnership();
-
-            //setting camera
-            CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
-            TPSCam.LookAt = Local.transform.Find("Scarf").transform;
-            TPSCam.Follow = Local.transform;
-
-            //setting canvas tag
-            GameObject.Find("Canvas").GetComponent<Master>().Cat = Local.name;
-        }
-    }
 
     [PunRPC]
     public void RPC_Chat(string otherCat, string Msg)
@@ -224,7 +219,7 @@ public class Player_Motor : MonoBehaviour
         {
             Aud.Play();
             Text.text = Msg;
-            Text.GetComponent<TextToCamera>().Timer = Msg.Length * 20;
+            Text.GetComponent<TextToCamera>().Timer = Msg.Length * 40;
         }
     }
 }

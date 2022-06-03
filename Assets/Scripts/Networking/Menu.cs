@@ -31,7 +31,13 @@ public class Menu : MonoBehaviourPunCallbacks
     //when the connection to the master is completed
     public override void OnConnectedToMaster()
     {
-        Load_Text.text = "Connected.";
+        if (PlayerPrefs.GetString("Server") != PhotonNetwork.CloudRegion && PlayerPrefs.GetString("Server") != "")
+        {
+            if (PlayerPrefs.GetString("Server") == "US") US();
+            else if (PlayerPrefs.GetString("Server") == "EU") EU();
+        }
+
+        Load_Text.text = "Connected";
         Con = true;
         PhotonNetwork.JoinLobby();
     }
@@ -99,11 +105,15 @@ public class Menu : MonoBehaviourPunCallbacks
 
     void Play()
     {
-        if (Con) PlayMenu.SetActive(true);
-    }
+        if (Con)
+        {
+            if (PlayMenu.activeSelf == true) PlayMenu.SetActive(false);
+            else PlayMenu.SetActive(true);
+        }
 
-    //exiting the game
-    void Exit()
+    }
+        //exiting the game
+        void Exit()
     {
         PhotonNetwork.LeaveLobby();
     }
@@ -118,4 +128,56 @@ public class Menu : MonoBehaviourPunCallbacks
 
         }
     }
+
+    //deleting player prefs
+    void Delete()
+    {
+        PlayerPrefs.DeleteAll();
+        Load_Text.text = "Save Deleted";
+    }
+
+
+    //switching servers
+    void US()
+    {
+        PlayerPrefs.GetString("Server", "US");
+
+        if (Con == true)
+        {
+            Load_Text.text = "Setting Server US";
+
+            Con = false;
+
+            PhotonNetwork.Disconnect();
+
+            PhotonNetwork.ConnectToRegion("us");
+
+        }
+        else
+        {
+            Load_Text.text = "Switching Servers To Fast";
+        }
+    }
+
+    //switching servers
+    void EU()
+    {
+        PlayerPrefs.GetString("Server", "EU");
+
+        if (Con == true)
+        {
+            Load_Text.text = "Setting Server EU";
+
+            Con = false;
+
+            PhotonNetwork.Disconnect();
+
+            PhotonNetwork.ConnectToRegion("EU");
+        }
+        else
+        {
+            Load_Text.text = "Switching Servers To Fast";
+        }
+    }
+
 }

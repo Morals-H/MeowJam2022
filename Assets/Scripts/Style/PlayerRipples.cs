@@ -7,10 +7,12 @@ public class PlayerRipples : MonoBehaviour
     private Transform Player;
     public string Target;
     private Vector3 Home;
+    private AudioSource Aud;
 
     private void Start()
     {
         Home = transform.position;
+        Aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -25,6 +27,7 @@ public class PlayerRipples : MonoBehaviour
         {
             GetComponent<MeshRenderer>().enabled = true;
             Player = other.transform;
+            Aud.Play();
         }
     }
 
