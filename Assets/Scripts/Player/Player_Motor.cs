@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Cinemachine;
 
 public class Player_Motor : MonoBehaviour
 {
@@ -27,8 +26,6 @@ public class Player_Motor : MonoBehaviour
     private int timer, AniTimer;
     private TextMesh Text;
     private CapsuleCollider Col;
-
-    private GameObject Ink, Yuki;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,8 +38,6 @@ public class Player_Motor : MonoBehaviour
         Col = GetComponent<CapsuleCollider>();
         Circle = transform.Find("LandRing");
         Circle.gameObject.SetActive(false);
-        Yuki = GameObject.Find("Yuki");
-        Ink = GameObject.Find("Ink");
 
     }
 
@@ -95,41 +90,6 @@ public class Player_Motor : MonoBehaviour
         {
             transform.position = new Vector3(0, 20, 0);
         }
-    }
-
-    //help players figure where they are
-    private RaycastHit Floor;
-    private Transform Circle;
-    private int partner;
-
-    //updated every few miliseconds
-    private void FixedUpdate()
-    {
-        if (PhotonNetwork.CurrentRoom.PlayerCount != partner)
-        {
-            partner = PhotonNetwork.CurrentRoom.PlayerCount;
-            View.RPC("RPC_MyCat", RpcTarget.All, isPlayer);
-        }
-
-
-        //action timer
-        if (timer > 0)
-        {
-            timer--;
-        }
-        
-        if (isGrounded != 2)
-        {
-            Physics.Raycast(transform.position, Vector3.down, out Floor, Mathf.Infinity);
-            Circle.position = Floor.point;
-            if (Vector3.Distance(transform.position, Circle.position) > 0.25f) Circle.gameObject.SetActive(true);
-            else Circle.gameObject.SetActive(false);
-        }
-        else Circle.gameObject.SetActive(false);
-
-        //animation timer
-        if (AniTimer > 0) AniTimer--;
-        if (Anim.GetBool("Action") && AniTimer == 0) Anim.SetBool("Action", false);
     }
 
     public Transform cam;
@@ -188,8 +148,10 @@ public class Player_Motor : MonoBehaviour
         Anim.SetBool("isGrounded", false);
     }
 
+    private Vector3 LandedPos;
+
     //collision handling
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         Anim.SetBool("isGrounded", true);
 
@@ -199,8 +161,28 @@ public class Player_Motor : MonoBehaviour
             {
                 isGrounded = 2;
             }
+            else if (timer == 0)
+            {
+                timer = 4;
+                LandedPos = transform.position;
+            }
         }
     }
+    //collision handling
+    private void OnCollisionStay(Collision collision)
+    {
+        Anim.SetBool("isGrounded", true);
+
+        if (View.IsMine && isPlayer && isGrounded != 2)
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, 0.1f) || 
+                timer == 1 && Vector3.Distance(transform.position, LandedPos) < 0.25f)
+            {
+                isGrounded = 2;
+            }
+        }
+    }
+
     //When exiting a Collider
     private void OnCollisionExit(Collision collision)
     {
@@ -211,42 +193,36 @@ public class Player_Motor : MonoBehaviour
         }
     }
 
-    //Networking
-    //getting our cat
-        [PunRPC]
-    public void RPC_MyCat(bool Player)
+
+    //help players figure where they are
+    private RaycastHit Floor;
+    private Transform Circle;
+
+    //updated every few miliseconds
+    private void FixedUpdate()
     {
-        if (!isPlayer) 
+        //action timer
+        if (timer > 0)
         {
-            isPlayer = Player;
+            timer--;
         }
 
-        if (!isPlayer && GameObject.Find("Canvas").GetComponent<Master>().Cat == "")
+        if (isGrounded != 2)
         {
-            GetComponent<PhotonView>().RequestOwnership();
-            isPlayer = true;
-
-            if (Yuki.GetComponent<PhotonView>().IsMine && Ink.GetComponent<PhotonView>().IsMine && Yuki.GetComponent<Player_Motor>().isPlayer && Ink.GetComponent<Player_Motor>().isPlayer)
-            {
-                Yuki.GetComponent<Player_Motor>().isPlayer = false;
-            }
-
-            CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
-            TPSCam.LookAt = transform.Find("Scarf").transform;
-            TPSCam.Follow = transform;
-            Debug.Log(name + " " + Player);
-            GameObject.Find("Canvas").GetComponent<Master>().Cat = name;
+            Physics.Raycast(transform.position, Vector3.down, out Floor, Mathf.Infinity);
+            Circle.position = Floor.point;
+            if (Vector3.Distance(transform.position, Circle.position) > 0.25f) Circle.gameObject.SetActive(true);
+            else Circle.gameObject.SetActive(false);
         }
+        else Circle.gameObject.SetActive(false);
+
+        //animation timer
+        if (AniTimer > 0) AniTimer--;
+        if (Anim.GetBool("Action") && AniTimer == 0) Anim.SetBool("Action", false);
     }
+    
 
-    //when player leaves
     [PunRPC]
-    public void RPC_Left()
-    {
-        isPlayer = false;
-    }
-
-        [PunRPC]
     public void RPC_Chat(string otherCat, string Msg)
     {
         if (otherCat == this.name)

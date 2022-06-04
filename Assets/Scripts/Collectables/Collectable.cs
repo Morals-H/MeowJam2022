@@ -43,7 +43,8 @@ public class Collectable : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_Break(int Player, string Weapon)
     {
-        Timer = 150;
+        Timer = 50;
+        View.RPC("RPC_Break", RpcTarget.AllBuffered, View.ViewID);
         GetComponent<MeshRenderer>().enabled = false;
     }
 

@@ -50,6 +50,11 @@ MonoBehaviour:
   - RPC_Refresh
   - RPC_Left
   - RPC_Join
+  - RPC_Ink
+  - RPC_Yuki
+  - isClient
+  - RPC_isClient
+  - RPC_myCat
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

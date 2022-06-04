@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Cinemachine;
 
 public class Master : MonoBehaviourPunCallbacks
 {
@@ -38,6 +39,7 @@ public class Master : MonoBehaviourPunCallbacks
             SetPause = true;
             if (PauseMenu.activeSelf)
             {
+                GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>().enabled = true;
                 Resume();
             }
             else
@@ -55,6 +57,7 @@ public class Master : MonoBehaviourPunCallbacks
                     Ink.GetComponent<Animator>().SetFloat("Speed", 0);
                     Ink.GetComponent<Player_Motor>().enabled = false;
                 }
+                GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>().enabled = false;
             }
         }
         else if(Input.GetAxis("Pause") == 0) SetPause = false;
@@ -67,6 +70,7 @@ public class Master : MonoBehaviourPunCallbacks
         PauseMenu.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>().enabled = true;
 
         if (Chat.text != "")
         {
@@ -93,16 +97,9 @@ public class Master : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.RemoveBufferedRPCs();
 
-        if (Cat == "Yuki")
-        {
-            Yuki.GetComponent<PhotonView>().RPC("RPC_Left", RpcTarget.All);
-        }
-        else
-        {
-            Ink.GetComponent<PhotonView>().RPC("RPC_Left", RpcTarget.All);
-        }
-
-
+        if (Cat == "Yuki") Yuki.GetComponent<Player_Motor>().isPlayer = false;
+        else Ink.GetComponent<Player_Motor>().isPlayer = false;
+        
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("Menu");
     }
