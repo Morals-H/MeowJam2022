@@ -70,7 +70,9 @@ ModelImporter:
       additiveReferencePoseFrame: 1
     isReadable: 0
   meshes:
-    lODScreenPercentages: []
+    lODScreenPercentages:
+    - 0.08679149
+    - 0.01
     globalScale: 1
     meshCompression: 0
     addColliders: 0

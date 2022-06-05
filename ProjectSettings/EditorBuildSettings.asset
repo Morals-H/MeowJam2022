@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 864cbb0e790d11a46bbe76e64ef37d65
   - enabled: 1
-    path: Assets/Scenes/Main.unity
+    path: Assets/Scenes/CamdanValley.unity
     guid: ec2b98898db8815468b5147bf0f93ac0
   m_configObjects: {}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class CatSelecter : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class CatSelecter : MonoBehaviour
             //requesting player
             Ink.GetComponent<Player_Motor>().isPlayer = true;
             Ink.GetComponent<PhotonView>().RequestOwnership();
-            view.RPC("RPC_myCat", RpcTarget.OthersBuffered, "NotPlayable");
+            view.RPC("RPC_myCat", RpcTarget.OthersBuffered, "NotPlayable", SceneManager.GetActiveScene().name);
             //setting camera
             CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
             TPSCam.LookAt = Ink.transform.Find("Scarf").transform;
@@ -45,35 +46,40 @@ public class CatSelecter : MonoBehaviour
 
     //called to figure out whose cat is whose
     [PunRPC]
-    public void RPC_myCat(string InkPlayable)
+    public void RPC_myCat(string InkPlayable, string Scene)
     {
-        if (InkPlayable == "Playable")
+        if (SceneManager.GetActiveScene().name == Scene)
         {
-            //requesting player
-            Ink.GetComponent<Player_Motor>().isPlayer = true;
-            Ink.GetComponent<PhotonView>().RequestOwnership();
-            Ink.GetComponent<AudioSource>().Play();
-            view.RPC("RPC_myCat", RpcTarget.OthersBuffered, "NotPlayable");
-            //setting camera
-            CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
-            TPSCam.LookAt = Ink.transform.Find("Scarf").transform;
-            TPSCam.Follow = Ink.transform;
-            //setting canvas name
-            GameObject.Find("Canvas").GetComponent<Master>().Cat = "Ink";
+            if (InkPlayable == "Playable")
+            {
+                //requesting player
+                Ink.GetComponent<Player_Motor>().isPlayer = true;
+                Ink.GetComponent<PhotonView>().RequestOwnership();
+                view.RPC("RPC_myCat", RpcTarget.OthersBuffered, "NotPlayable", SceneManager.GetActiveScene().name);
+                //setting camera
+                CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
+                TPSCam.LookAt = Ink.transform.Find("Scarf").transform;
+                TPSCam.Follow = Ink.transform;
+                //setting canvas name
+                GameObject.Find("Canvas").GetComponent<Master>().Cat = "Ink";
+            }
+            else
+            {
+                //requesting player
+                Yuki.GetComponent<Player_Motor>().isPlayer = true;
+                Yuki.GetComponent<PhotonView>().RequestOwnership();
+                view.RPC("RPC_myCat", RpcTarget.OthersBuffered, "Playable", SceneManager.GetActiveScene().name);
+                //setting camera
+                CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
+                TPSCam.LookAt = Yuki.transform.Find("Scarf").transform;
+                TPSCam.Follow = Yuki.transform;
+                //setting canvas name
+                GameObject.Find("Canvas").GetComponent<Master>().Cat = "Yuki";
+            }
         }
         else
         {
-            //requesting player
-            Yuki.GetComponent<Player_Motor>().isPlayer = true;
-            Yuki.GetComponent<PhotonView>().RequestOwnership();
-            Yuki.GetComponent<AudioSource>().Play();
-            view.RPC("RPC_myCat", RpcTarget.OthersBuffered, "Playable");
-            //setting camera
-            CinemachineFreeLook TPSCam = GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>();
-            TPSCam.LookAt = Yuki.transform.Find("Scarf").transform;
-            TPSCam.Follow = Yuki.transform;
-            //setting canvas name
-            GameObject.Find("Canvas").GetComponent<Master>().Cat = "Yuki";
+            PhotonNetwork.LoadLevel(Scene);
         }
     }
 }

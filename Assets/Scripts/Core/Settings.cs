@@ -34,12 +34,12 @@ public class Settings : MonoBehaviour
             xInv.isOn = X;
             yInv.isOn = Y;
         }
-        else
+        else if (Sensitivty.z != 1)
         {
             Sound = new Vector3(1, 1, 1);
-            Sensitivty = new Vector3(5, 300, 1);
+            Sensitivty = new Vector3(300, 5, 1);
             X = false;
-            Y = false;
+            Y = true;
 
             PlayerPrefsX.SetVector3("Sound", Sound);
             PlayerPrefsX.SetVector3("Sensitivty", Sensitivty);

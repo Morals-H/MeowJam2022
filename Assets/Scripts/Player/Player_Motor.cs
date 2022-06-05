@@ -71,7 +71,7 @@ public class Player_Motor : MonoBehaviour
             }
             else Anim.SetFloat("Speed", 0);
 
-            if (Input.GetAxis("Sprint") > 0)
+            if (Input.GetAxis("Sprint") > 0.25 || Input.GetAxis("Sprint") < -0.25)
             {
                 if (Speed < 4)
                 {
@@ -93,7 +93,7 @@ public class Player_Motor : MonoBehaviour
     }
 
     public Transform cam;
-
+    private float curSpeed;
     private float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
 
@@ -101,6 +101,14 @@ public class Player_Motor : MonoBehaviour
     void Move()
     {
         Vector3 direction = new Vector3(mov.x, 0f, mov.z).normalized;
+        if (isGrounded == 2)
+        {
+            curSpeed = Speed; 
+        }
+        else if(curSpeed > 1.5)
+        {
+            curSpeed *= 0.9999f;
+        }
 
         if (direction.magnitude >= 0.1f)
         {
@@ -108,8 +116,7 @@ public class Player_Motor : MonoBehaviour
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
             transform.rotation = Quaternion.Euler(0, angle, 0f);
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * Speed;
-
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * curSpeed;
             //moving with rigidbody
             Rig.MovePosition(Rig.position + moveDir * Time.deltaTime);
         }
@@ -227,6 +234,7 @@ public class Player_Motor : MonoBehaviour
     {
         if (otherCat == this.name)
         {
+            Debug.Log("Meow" + gameObject.name);
             Aud.Play();
             Text.text = Msg;
             Text.GetComponent<TextToCamera>().Timer = Msg.Length * 40;

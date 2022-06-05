@@ -99,8 +99,7 @@ public class Menu : MonoBehaviourPunCallbacks
     //When you enter a match
     public override void OnJoinedRoom()
     {
-        //PhotonNetwork.LoadLevel("Main_Scene")
-        PhotonNetwork.LoadLevel("Main");
+        PhotonNetwork.LoadLevel("CamdanValley");
     }
 
     void Play()
@@ -136,14 +135,24 @@ public class Menu : MonoBehaviourPunCallbacks
         PlayerPrefs.DeleteAll();
         Load_Text.text = "Save Deleted";
 
-        //putting default settings
-        Vector3 Sound = new Vector3(1, 1, 1);
-        Vector3 Sensitivty = new Vector3(300, 5, 1);
+        Vector3 Sensitivty = PlayerPrefsX.GetVector3("Sensitivty");
+        Vector3 Sound = PlayerPrefsX.GetVector3("Sound");
+        bool X = PlayerPrefsX.GetBool("X");
+        bool Y = PlayerPrefsX.GetBool("Y");
+
+
+        if (Sensitivty.z != 1)
+        {
+            Sound = new Vector3(1, 1, 1);
+            Sensitivty = new Vector3(300, 5, 1);
+            X = false;
+            Y = true;
+        }
 
         PlayerPrefsX.SetVector3("Sound", Sound);
         PlayerPrefsX.SetVector3("Sensitivty", Sensitivty);
-        PlayerPrefsX.SetBool("X", false);
-        PlayerPrefsX.SetBool("Y", false);
+        PlayerPrefsX.SetBool("X", X);
+        PlayerPrefsX.SetBool("Y", Y);
     }
 
 

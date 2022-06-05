@@ -33,8 +33,15 @@ public class Collectable : MonoBehaviourPunCallbacks
     {
         if (other.tag == "Player" && Timer == -1)
         {
-            Timer = 150;
-            GetComponent<MeshRenderer>().enabled = false;
+            //updating player prefs
+            List<string> Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
+            Collected.Add(tag);
+            PlayerPrefsX.SetStringArray("Collected", Collected.ToArray());
+
+            //effect
+            Timer = 100;
+            transform.Find("YingYang_LOD0").GetComponent<MeshRenderer>().enabled = false;
+            transform.Find("YingYang_LOD1").GetComponent<MeshRenderer>().enabled = false;
             GetComponent<AudioSource>().Play();
         }
     }
@@ -43,7 +50,13 @@ public class Collectable : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_Break(int Player, string Weapon)
     {
-        Timer = 50;
+        //updating player prefs
+        List<string> Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
+        Collected.Add(tag);
+        PlayerPrefsX.SetStringArray("Collected", Collected.ToArray());
+
+        //effect
+        Timer = 100;
         View.RPC("RPC_Break", RpcTarget.AllBuffered, View.ViewID);
         GetComponent<MeshRenderer>().enabled = false;
     }
