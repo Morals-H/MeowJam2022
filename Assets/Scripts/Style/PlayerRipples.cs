@@ -23,7 +23,7 @@ public class PlayerRipples : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!Player && other.name == Target)
+        if (other.name == Target || other.name == Target + "(Clone)")
         {
             GetComponent<MeshRenderer>().enabled = true;
             Player = other.transform;
@@ -33,7 +33,7 @@ public class PlayerRipples : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.name == Target)
+        if (other.name == Target || other.name == Target + "(Clone)")
         {
             GetComponent<MeshRenderer>().enabled = false;
             Player = null;

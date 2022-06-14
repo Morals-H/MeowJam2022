@@ -10,17 +10,19 @@ public class Master : MonoBehaviourPunCallbacks
     //pause logic
     public GameObject PauseMenu;
     private bool SetPause;
+    public GameObject LoadScreen;
 
     //Chat
+    private PhotonView view;
     public InputField Chat;
 
     //player logic
-    public GameObject Yuki, Ink;
-    public string Cat;
+    public GameObject OurCat;
 
     // Start is called before the first frame update
     void Start()
     {
+        view = GetComponent<PhotonView>();
 
         //hiding cursor
         Cursor.visible = false;
@@ -47,16 +49,10 @@ public class Master : MonoBehaviourPunCallbacks
                 PauseMenu.SetActive(true);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.Confined;
-                if (Cat == "Yuki")
-                {
-                    Yuki.GetComponent<Animator>().SetFloat("Speed", 0);
-                    Yuki.GetComponent<Player_Motor>().enabled = false;
-                }
-                else
-                {
-                    Ink.GetComponent<Animator>().SetFloat("Speed", 0);
-                    Ink.GetComponent<Player_Motor>().enabled = false;
-                }
+
+                OurCat.GetComponent<Animator>().SetFloat("Speed", 0);
+                OurCat.GetComponent<Player_Motor>().enabled = false;
+
                 GameObject.Find("TPSCam").GetComponent<CinemachineFreeLook>().enabled = false;
             }
         }
@@ -77,29 +73,44 @@ public class Master : MonoBehaviourPunCallbacks
             //limiting chat digits
             if (Chat.text.Length > 30) Chat.text = Chat.text.Substring(0, 30);
 
-            //sending the actual message 
-            if (Cat == "Yuki") Yuki.GetComponent<PhotonView>().RPC("RPC_Chat", RpcTarget.AllBuffered, Cat, Chat.text);
-            else Ink.GetComponent<PhotonView>().RPC("RPC_Chat", RpcTarget.AllBuffered, Cat, Chat.text);
+            view.RequestOwnership();
+            view.RPC("RPC_Chat", RpcTarget.All, OurCat.name, Chat.text);
 
             //resetting text
             Chat.text = "";
 
-            if (Cat == "Yuki") Yuki.GetComponent<AudioSource>().Play();
-            else Ink.GetComponent<AudioSource>().Play();
+            OurCat.GetComponent<AudioSource>().Play();
         }
 
         //restoring player movement
-        if (Cat == "Yuki") Yuki.GetComponent<Player_Motor>().enabled = true;
-        else Ink.GetComponent<Player_Motor>().enabled = true;
+        OurCat.GetComponent<Player_Motor>().enabled = true;
+    }
+
+
+    //recieving a message
+    [PunRPC]
+    public void RPC_Chat(string SenderCat, string Msg)
+    {
+        GameObject ChatTarget = OurCat;
+
+        if (SenderCat == OurCat.name)
+        {
+            ChatTarget = OurCat;
+        }
+        else if (GameObject.Find("Ink_Cat(Clone)"))
+        {
+            ChatTarget = GameObject.Find("Ink_Cat(Clone)");
+        }
+        else if (GameObject.Find("Yuki_Cat(Clone)"))
+        {
+            ChatTarget = GameObject.Find("Yuki_Cat(Clone)");
+        }
+        ChatTarget.GetComponent<Player_Motor>().SendMessage("Chat", Msg);
     }
 
     void Menu()
     {
-        PhotonNetwork.RemoveBufferedRPCs();
-
-        if (Cat == "Yuki") Yuki.GetComponent<Player_Motor>().isPlayer = false;
-        else Ink.GetComponent<Player_Motor>().isPlayer = false;
-        
+        LoadScreen.SetActive(true);
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("Menu");
     }
@@ -108,8 +119,7 @@ public class Master : MonoBehaviourPunCallbacks
     {
         try
         {
-            if (Cat == "Yuki") Yuki.GetComponent<Player_Motor>().isPlayer = false;
-            else Ink.GetComponent<Player_Motor>().isPlayer = false;
+            OurCat.GetComponent<Player_Motor>().isPlayer = false;
 
             PhotonNetwork.LeaveLobby();
         }

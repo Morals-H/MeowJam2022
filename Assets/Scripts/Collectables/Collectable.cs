@@ -5,28 +5,23 @@ using Photon.Pun;
 
 public class Collectable : MonoBehaviourPunCallbacks
 {
-    private int Timer = -1;
-    public string Tag;
+    public int Timer = -1;
+    public string ColTag;
     private PhotonView View;
+    public List<string> Collected;
 
     void Awake()
     {
         View = GetComponent<PhotonView>();
-
-        //checking if has been collected
-        List<string> Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
-
-        if (Collected.Contains(Tag + ","))
-        {
-            View.RPC("RPC_Break", RpcTarget.AllBuffered, View.ViewID);
-            Destroy(this.gameObject);
-        }
     }
 
     private void FixedUpdate()
     {
         if (Timer > 0) Timer--;
-        else if (Timer == 0) Destroy(this.gameObject);
+        else if (Timer == 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,8 +29,8 @@ public class Collectable : MonoBehaviourPunCallbacks
         if (other.tag == "Player" && Timer == -1)
         {
             //updating player prefs
-            List<string> Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
-            Collected.Add(tag);
+            Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
+            Collected.Add(ColTag);
             PlayerPrefsX.SetStringArray("Collected", Collected.ToArray());
 
             //effect
@@ -43,22 +38,32 @@ public class Collectable : MonoBehaviourPunCallbacks
             transform.Find("YingYang_LOD0").GetComponent<MeshRenderer>().enabled = false;
             transform.Find("YingYang_LOD1").GetComponent<MeshRenderer>().enabled = false;
             GetComponent<AudioSource>().Play();
+            View.RPC("RPC_Break", RpcTarget.Others, tag);
+            SendMessageUpwards("ReloadArray");
         }
     }
 
     //recieving a request to destroy self
     [PunRPC]
-    public void RPC_Break(int Player, string Weapon)
+    public void RPC_Break(string RPCTag)
     {
-        //updating player prefs
-        List<string> Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
-        Collected.Add(tag);
-        PlayerPrefsX.SetStringArray("Collected", Collected.ToArray());
+        if (RPCTag == tag && Timer == -1)
+        {
+            //updating player prefs
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Collected = new List<string>(PlayerPrefsX.GetStringArray("Collected"));
+                Collected.Add(ColTag);
+                PlayerPrefsX.SetStringArray("Collected", Collected.ToArray());
+            }
 
-        //effect
-        Timer = 100;
-        View.RPC("RPC_Break", RpcTarget.AllBuffered, View.ViewID);
-        GetComponent<MeshRenderer>().enabled = false;
+            //effect
+            Timer = 100;
+            transform.Find("YingYang_LOD0").GetComponent<MeshRenderer>().enabled = false;
+            transform.Find("YingYang_LOD1").GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<AudioSource>().Play();
+            SendMessageUpwards("ReloadArray");
+        }
     }
 
 }

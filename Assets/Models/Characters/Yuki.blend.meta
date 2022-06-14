@@ -21,6 +21,15 @@ ModelImporter:
   - first:
       74: -1609281748187839663
     second: Sprint
+  - first:
+      74: 5539831331247536789
+    second: Jump
+  - first:
+      74: -8043482139096060476
+    second: BackFlip
+  - first:
+      74: 8748424939332717376
+    second: RunJump
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -497,6 +506,303 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone
+        weight: 1
+      - path: Armature/Bone/Stomach
+        weight: 1
+      - path: Armature/Bone/Stomach/Back
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck/Head/Head_end
+        weight: 0
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l/Hand.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l/Hand.l/Hand.l_end
+        weight: 0
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r/Hand.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r/Hand.r/Hand.r_end
+        weight: 0
+      - path: Armature/Bone/Tail1
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2/Tail3/Tail3_end
+        weight: 1
+      - path: Armature/Bone/Waist.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l/Foot.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l/Foot.l/Foot.l_end
+        weight: 0
+      - path: Armature/Bone/Waist.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r/Foot.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r/Foot.r/Foot.r_end
+        weight: 0
+      - path: Scarf
+        weight: 0
+      - path: Yuki
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.96
+    - serializedVersion: 16
+      name: Jump
+      takeName: Scene
+      internalID: 0
+      firstFrame: 125
+      lastFrame: 138
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone
+        weight: 1
+      - path: Armature/Bone/Stomach
+        weight: 1
+      - path: Armature/Bone/Stomach/Back
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck/Head/Head_end
+        weight: 0
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l/Hand.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l/Hand.l/Hand.l_end
+        weight: 0
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r/Hand.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r/Hand.r/Hand.r_end
+        weight: 0
+      - path: Armature/Bone/Tail1
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2/Tail3/Tail3_end
+        weight: 1
+      - path: Armature/Bone/Waist.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l/Foot.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l/Foot.l/Foot.l_end
+        weight: 0
+      - path: Armature/Bone/Waist.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r/Foot.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r/Foot.r/Foot.r_end
+        weight: 0
+      - path: Scarf
+        weight: 0
+      - path: Yuki
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.96
+    - serializedVersion: 16
+      name: BackFlip
+      takeName: Scene
+      internalID: 0
+      firstFrame: 150
+      lastFrame: 179
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone
+        weight: 1
+      - path: Armature/Bone/Stomach
+        weight: 1
+      - path: Armature/Bone/Stomach/Back
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck/Head
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Neck/Head/Head_end
+        weight: 0
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l/Hand.l
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.l/UpperArm.l/ForeArm.l/Hand.l/Hand.l_end
+        weight: 0
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r/Hand.r
+        weight: 1
+      - path: Armature/Bone/Stomach/Back/Chest/Shoulder.r/UpperArm.r/ForeArm.r/Hand.r/Hand.r_end
+        weight: 0
+      - path: Armature/Bone/Tail1
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2/Tail3
+        weight: 1
+      - path: Armature/Bone/Tail1/Tail2/Tail3/Tail3_end
+        weight: 1
+      - path: Armature/Bone/Waist.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l/Foot.l
+        weight: 1
+      - path: Armature/Bone/Waist.l/Thigh.l/LowerLeg.l/Foot.l/Foot.l_end
+        weight: 0
+      - path: Armature/Bone/Waist.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r/Foot.r
+        weight: 1
+      - path: Armature/Bone/Waist.r/Thigh.r/LowerLeg.r/Foot.r/Foot.r_end
+        weight: 0
+      - path: Scarf
+        weight: 0
+      - path: Yuki
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.96
+    - serializedVersion: 16
+      name: RunJump
+      takeName: Scene
+      internalID: 0
+      firstFrame: 180
+      lastFrame: 195
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

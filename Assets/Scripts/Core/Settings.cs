@@ -100,7 +100,6 @@ public class Settings : MonoBehaviour
         GameObject[] Objs = GameObject.FindGameObjectsWithTag("Audio");
         foreach (GameObject i in Objs)
         {
-            Debug.Log(i.name);
             i.SendMessage("RefreshSettings");
         }
         Objs = GameObject.FindGameObjectsWithTag("Player");

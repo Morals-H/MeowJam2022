@@ -55,6 +55,14 @@ MonoBehaviour:
   - isClient
   - RPC_isClient
   - RPC_myCat
+  - RPC_RScene
+  - RPC_Scene
+  - RPC_ReRequest
+  - RPC_Request
+  - RPC_Remove
+  - RPC_ColSync
+  - RPC_ColSyncReq
+  - RPC_ColSyncSingle
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

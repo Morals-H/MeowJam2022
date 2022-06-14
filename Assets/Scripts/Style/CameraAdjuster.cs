@@ -10,7 +10,7 @@ public class CameraAdjuster : MonoBehaviour
     void Start()
     {
         CM = GetComponent<CinemachineFreeLook>();
-        if (Sensitivty.z == 1) RefreshSettings();
+        if (PlayerPrefsX.GetVector3("Sensitivty").z == 1) RefreshSettings();
     }
     void RefreshSettings()
     {
@@ -18,8 +18,6 @@ public class CameraAdjuster : MonoBehaviour
         Sensitivty = PlayerPrefsX.GetVector3("Sensitivty");
         X = PlayerPrefsX.GetBool("X");
         Y = PlayerPrefsX.GetBool("Y");
-
-        Debug.Log(Sensitivty);
 
         //loading camera settings
         CM.m_XAxis.m_MaxSpeed = Sensitivty.x;

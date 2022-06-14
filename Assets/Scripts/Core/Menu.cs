@@ -24,6 +24,7 @@ public class Menu : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        PlayerPrefs.SetString("Spawn", "Spawn_Home");
         Load_Text.text = "Connecting...";
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -85,6 +86,10 @@ public class Menu : MonoBehaviourPunCallbacks
     //when server hosting begins
     void Hosting()
     {
+        //resetting stats
+        PlayerPrefs.SetString("Spawn", "Spawn_Home");
+
+        //loading game
         Load_Text.text = "Creating Game...";
         PhotonNetwork.LeaveLobby();
         PhotonNetwork.CreateRoom(ServerHost.text, new RoomOptions { MaxPlayers = 2, IsVisible = true });
@@ -92,6 +97,12 @@ public class Menu : MonoBehaviourPunCallbacks
 
     void Join()
     {
+        //resetting 
+        PlayerPrefsX.SetBool("FJ", true);
+        PlayerPrefs.SetString("Spawn", "Spawn_Home");
+
+        //loading game
+        PlayerPrefsX.SetBool("FJ", true);
         Load_Text.text = "Joining Game...";
         PhotonNetwork.LeaveLobby();
         PhotonNetwork.JoinRoom(ServerJoin.text);
@@ -132,7 +143,6 @@ public class Menu : MonoBehaviourPunCallbacks
     //deleting player prefs
     void Delete()
     {
-        PlayerPrefs.DeleteAll();
         Load_Text.text = "Save Deleted";
 
         Vector3 Sensitivty = PlayerPrefsX.GetVector3("Sensitivty");
@@ -140,7 +150,7 @@ public class Menu : MonoBehaviourPunCallbacks
         bool X = PlayerPrefsX.GetBool("X");
         bool Y = PlayerPrefsX.GetBool("Y");
 
-
+        PlayerPrefs.DeleteAll();
         if (Sensitivty.z != 1)
         {
             Sound = new Vector3(1, 1, 1);
