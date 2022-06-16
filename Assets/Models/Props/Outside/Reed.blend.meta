@@ -8,12 +8,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: BFCulling
-    second: {fileID: 2100000, guid: 99076d857ffe5ea4f8b156d6ee6c6ad0, type: 2}
+    second: {fileID: 2100000, guid: 903696e9d8dd5ab4c8f9bc507db214db, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Mushroom
-    second: {fileID: 2100000, guid: 903696e9d8dd5ab4c8f9bc507db214db, type: 2}
+    second: {fileID: 2100000, guid: 99076d857ffe5ea4f8b156d6ee6c6ad0, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
